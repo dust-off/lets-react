@@ -6,7 +6,7 @@ import React from 'react';
 
 
 import styled from 'styled-components';
-import { AuthActionFactory } from 'lattice-auth';
+// import { AuthActionFactory } from 'lattice-auth';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router';
 import { bindActionCreators } from 'redux';
