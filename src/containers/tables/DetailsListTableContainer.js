@@ -11,7 +11,7 @@ import { withRouter } from 'react-router-dom';
 import reduxActions from '../../core/redux/ReduxActions';
 import StyledCard from '../../components/cards/StyledCard';
 import DetailsListTable from '../../components/tables/DetailsListTable';
-import { getDetails } from '../../utils/helperFunctions';
+import { getMoreDetails } from '../../utils/Utils';
 
 const Content = styled.div`
     top: 50px;
@@ -42,9 +42,10 @@ const mapStateToProps = (state :object) => {
   const fromState = state.get(getThisList);
   const activeIndex = state.get('activeItem');
   const item = fromState.length > activeIndex ? fromState[activeIndex] : [];
+
   return ({
     item,
-    getDetails,
+    getDetails: getMoreDetails,
     setActiveItem: reduxActions.setActiveItem
   });
 };

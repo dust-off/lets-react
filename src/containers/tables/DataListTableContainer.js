@@ -7,10 +7,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 
 import { colors } from '../../core/Constants';
-import reduxActions from '../../core/redux/ReduxActions';
 import StyledCard from '../../components/cards/StyledCard';
 import DataListTable from '../../components/tables/DataListTable';
 
@@ -36,10 +34,7 @@ const Content = styled.div`
 `;
 
 type Props = {
-  actions :{
-    clickItem :() => void;
-    setActiveItem :() => void;
-  };
+  setActiveItem :() => void;
   activeItem :number;
   listItems :object;
 };
@@ -52,21 +47,11 @@ const EDMcontainer = (props :Props) => (
     <Content>
       <DataListTable
           listItems={props.listItems}
-          setActiveItem={props.actions.setActiveItem}
+          setActiveItem={props.setActiveItem}
           activeItem={props.activeItem} />
     </Content>
   </StyledCard>
 );
-
-function mapDispatchToProps(dispatch :Function) :Object {
-  const actions = {
-    setActiveItem: reduxActions.setActiveItem
-  };
-
-  return {
-    actions: bindActionCreators(actions, dispatch)
-  };
-}
 
 const mapStateToProps = (state :object) => ({
   listItems: state.get(state.get('listItems')),
@@ -74,6 +59,6 @@ const mapStateToProps = (state :object) => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(EDMcontainer)
+  connect(mapStateToProps, null)(EDMcontainer)
 );
 
