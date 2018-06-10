@@ -90,7 +90,7 @@ const MainBody = (props :Props) => {
   const renderHelper = () => (
     <TableContainer>
       <TableDiv>
-        <EDMcontainer />
+        <EDMcontainer setListItems={props.actions.setListItems} />
       </TableDiv>
       <TableDiv>
         <DetailsContainer />
@@ -127,16 +127,10 @@ const MainBody = (props :Props) => {
   );
 };
 
-const setListItems = (value) => {
-  console.log('setListItems in MainBody');
-  return ({ type: actionType.UPDATE_LIST, value });
-};
-// const setActiveItem = (id, itemIndex) => ({ type: actionType.UPDATE_ACTIVE_ITEM, itemIndex });
-
 function mapDispatchToProps(dispatch :Function) :Object {
 
   const actions = {
-    setListItems,
+    setListItems: reduxActions.setListItems,
     setActiveItem: reduxActions.setActiveItem
   };
 
