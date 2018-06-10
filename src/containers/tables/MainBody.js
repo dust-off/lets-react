@@ -6,26 +6,41 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { NavLink, Redirect, Route, Switch, withRouter, Link } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter, Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
 import EDMcontainer from './DataListTableContainer';
-import StyledButton from '../../components/buttons/StyledButton';
 import DetailsContainer from './DetailsListTableContainer';
 import * as Routes from '../../core/router/Routes';
-
-import { actionType } from '../../core/Constants/index';
+import reduxActions from '../../core/redux/ReduxActions';
+import { actionType, colors } from '../../core/Constants/index';
 
 const NavBarWarp = styled.div`
   align-items: center;
-  background-color: #fefefe;
-  border-bottom: 1px solid #c5d5e5;
+  background: ${colors.SELECTED};
+  border-bottom: ${colors.BORDERS};
   display: flex;
   flex: 1 0 auto;
   flex-direction: row;
   height: 70px;
   justify-content: center;
   position: relative;
+  list-style-type: none;
+  .active {
+      color: ${colors.SLECTED_TEXT};
+      font-weight: bold;
+  }
+  .passive {
+      &:hover {
+      }
+  }
+  a {
+      text-decoration: none;
+      color: ${colors.BASE_TEXT};
+      &:hover {
+          color: ${colors.SLECTED_TEXT};
+      }
+  }
 `;
 
 const TableContainer = styled.div`
@@ -43,11 +58,19 @@ const TableDiv = styled.div`
 
 const BodyWrapper = styled.div`
     width: 100%
+    color: ${colors.BASE_TEXT}
 `;
 
-const TableHeader = styled.div`
-    height: 30px;
-    background: grey;
+// const Buttons = styled.div`
+//     height: 70px;
+//     font-size: 18px;
+//     border-radius: 5px;
+//     align-items: center;
+//     text-align: center;
+// `;
+
+const Padding = styled.div`
+    padding: 10px;
 `;
 
 type Props = {
@@ -59,34 +82,39 @@ type Props = {
 };
 
 const MainBody = (props :Props) => {
+  const currentPage = props.location.pathname.slice(1);
 
-  const renderHelper = () => {
-    props.actions.setListItems(props.location.pathname.slice(1));
-    props.actions.setActiveItem('', 0);
+  props.actions.setListItems(currentPage);
+  props.actions.setActiveItem('', 0);
 
-    return (
-      <TableContainer>
-        <TableDiv>
-          <EDMcontainer />
-        </TableDiv>
-        <TableDiv>
-          <DetailsContainer />
-        </TableDiv>
-      </TableContainer>
-    );
-  };
+  const renderHelper = () => (
+    <TableContainer>
+      <TableDiv>
+        <EDMcontainer />
+      </TableDiv>
+      <TableDiv>
+        <DetailsContainer />
+      </TableDiv>
+    </TableContainer>
+  );
 
   return (
     <BodyWrapper>
       <NavBarWarp>
         <Link to={Routes.PROPERTY}>
-          <StyledButton>PropertyTypes</StyledButton>
+          <Padding>
+            <div className={currentPage === 'property' ? 'active' : 'passive'}>PropertyTypes</div>
+          </Padding>
         </Link>
         <Link to={Routes.ENTITY}>
-          <StyledButton>EntityTypes</StyledButton>
+          <Padding>
+            <div className={currentPage === 'entity' ? 'active' : 'passive'}>EntityTypes</div>
+          </Padding>
         </Link>
         <Link to={Routes.ASSOCIATION}>
-          <StyledButton>AssociationTypes</StyledButton>
+          <Padding>
+            <div className={currentPage === 'association' ? 'active' : 'passive'}>AssociationTypes</div>
+          </Padding>
         </Link>
       </NavBarWarp>
       <Switch>
@@ -99,14 +127,17 @@ const MainBody = (props :Props) => {
   );
 };
 
-const setListItems = value => ({ type: actionType.UPDATE_LIST, value });
-const setActiveItem = (id, itemIndex) => ({ type: actionType.UPDATE_ACTIVE_ITEM, itemIndex });
+const setListItems = (value) => {
+  console.log('setListItems in MainBody');
+  return ({ type: actionType.UPDATE_LIST, value });
+};
+// const setActiveItem = (id, itemIndex) => ({ type: actionType.UPDATE_ACTIVE_ITEM, itemIndex });
 
 function mapDispatchToProps(dispatch :Function) :Object {
 
   const actions = {
     setListItems,
-    setActiveItem
+    setActiveItem: reduxActions.setActiveItem
   };
 
   return {
